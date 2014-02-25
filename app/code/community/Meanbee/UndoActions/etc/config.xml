@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Meanbee_UndoActions>
+            <version>1.0.0</version>
+        </Meanbee_UndoActions>
+    </modules>
+</config>
