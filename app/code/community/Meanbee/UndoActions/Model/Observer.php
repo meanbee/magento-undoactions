@@ -54,33 +54,21 @@ class Meanbee_UndoActions_Model_Observer {
         $checkoutSession = Mage::getSingleton('checkout/session');
         /** @var Mage_Sales_Model_Quote_Item $quoteItem */
         $quoteItem = $observer->getQuoteItem();
-        $productType = $quoteItem->getProductType();
 
-        switch($productType) {
-//            case 'bundle':
-//                $qiData = $this->_getBundleQuoteItemData($quoteItem);
-//                break;
-//            case 'configurable':
-//                $qiData = $this->_getBundleQuoteItemData($quoteItem);
-//                break;
-//            case 'grouped':
-//                $qiData = $this->_getBundleQuoteItemData($quoteItem);
-//                break;
-            default:
-            case 'virtual':
-            case 'downloadable':
-            case 'simple':
-                $product_id = $quoteItem->getData('product_id');
-                $options = array();
-                foreach($quoteItem->getOptions() as $option) {
-                    $options[] = unserialize($option->getData('value'));
-                }
-                $options = array_filter(array_map('array_filter', $options)); //Remove empty values.
-                Mage::log($options, null, 'ashsmith.log', true);
-                break;
+        $product_id = $quoteItem->getData('product_id');
+        $options = array();
+        foreach($quoteItem->getOptions() as $option) {
+            $options[] = unserialize($option->getData('value'));
         }
+        $options = array_filter(array_map('array_filter', $options)); //Remove empty values.
+        Mage::log($options, null, 'ashsmith.log', true);
 
-        Mage::getSingleton('core/session')->setUndoActions(array('product_id' => $product_id, 'quote_item_options' => $options));
+        Mage::getSingleton('core/session')->setUndoActions(
+            array(
+                'product_id' => $product_id,
+                'quote_item_options' => $options
+            )
+        );
 
         // Params we pass to update the item, we only need the quote item id, and quantity to remove.
         $urlParams = array('action' => 'undocartremove');
