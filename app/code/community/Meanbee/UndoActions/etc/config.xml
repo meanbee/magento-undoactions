@@ -5,4 +5,53 @@
             <version>1.0.0</version>
         </Meanbee_UndoActions>
     </modules>
+
+    <frontend>
+        <routers>
+            <undoactions>
+                <use>standard</use>
+                <args>
+                    <module>Meanbee_UndoActions</module>
+                    <frontName>undoactions</frontName>
+                </args>
+            </undoactions>
+        </routers>
+    </frontend>
+
+    <global>
+        <events>
+            <!-- START: Add to cart actions -->
+            <checkout_cart_product_add_after>
+                <observers>
+                    <meanbee_undoactions>
+                        <type>singleton</type>
+                        <class>Meanbee_UndoActions_Model_Observer</class>
+                        <method>checkoutCartProductAddAfter</method>
+                    </meanbee_undoactions>
+                </observers>
+            </checkout_cart_product_add_after>
+            <controller_action_postdispatch_checkout_cart_add>
+                <observers>
+                    <meanbee_undoactions>
+                        <type>singleton</type>
+                        <class>Meanbee_UndoActions_Model_Observer</class>
+                        <method>controllerActionPostdispatchCheckoutCartAdd</method>
+                    </meanbee_undoactions>
+                </observers>
+            </controller_action_postdispatch_checkout_cart_add>
+            <!-- END: Add to cart actions -->
+
+            <!-- START: Remove from cart actions -->
+            <sales_quote_remove_item>
+                <observers>
+                    <meanbee_undoactions>
+                        <type>singleton</type>
+                        <class>Meanbee_UndoActions_Model_Observer</class>
+                        <method>salesQuoteRemoveItem</method>
+                    </meanbee_undoactions>
+                </observers>
+            </sales_quote_remove_item>
+            <!-- END Remove from cart actions-->
+        </events>
+    </global>
 </config>
