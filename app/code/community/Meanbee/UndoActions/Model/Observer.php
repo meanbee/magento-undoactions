@@ -9,9 +9,14 @@ class Meanbee_UndoActions_Model_Observer {
         /** @var Mage_Sales_Model_Quote_Item $quoteItem */
         $quoteItem = $observer->getQuoteItem();
 
+        if($quoteItem->getParentItem() instanceof Mage_Sales_Model_Quote_Item) {
+            $quoteItem = $quoteItem->getParentItem();
+            Mage::log(get_class($quoteItem),null, 'ashsmith.log', true);
+        }
+
         Mage::getSingleton('core/session')->setUndoActions(
             array(
-                'product_id' => $product->getId(),
+                'product_id' => $quoteItem->getProductId(),
                 'product_name' => $product->getName(),
                 'quote_item_id' => $quoteItem->getId()
             )
@@ -61,7 +66,6 @@ class Meanbee_UndoActions_Model_Observer {
             $options[] = unserialize($option->getData('value'));
         }
         $options = array_filter(array_map('array_filter', $options)); //Remove empty values.
-        Mage::log($options, null, 'ashsmith.log', true);
 
         Mage::getSingleton('core/session')->setUndoActions(
             array(
@@ -78,7 +82,6 @@ class Meanbee_UndoActions_Model_Observer {
             $this->_undoUrl($urlParams)
         );
         $this->_updateMessages($checkoutSession, $message);
-
     }
 
     protected function _undoUrl($params) {

@@ -4,7 +4,6 @@ class Meanbee_UndoActions_IndexController extends Mage_Core_Controller_Front_Act
     public function indexAction() {
 
         $requestParams = $this->getRequest()->getParams();
-        Mage::log($requestParams, null, 'ashsmith.log', true);
 
         switch ($requestParams['action']) {
             case 'undocartadd':
@@ -28,22 +27,26 @@ class Meanbee_UndoActions_IndexController extends Mage_Core_Controller_Front_Act
         /** @var Mage_Sales_Model_Quote_Item $quoteItem */
         $quoteItem = $quote->getItemByProduct($product);
 
+        if(!$quoteItem) {
+            foreach($quote->getAllVisibleItems() as $item) {
+                if($item->getProductId() == $productId) {
+                    $quoteItem = $item;
+                    break;
+                }
+            }
+        }
+
         $newQty = $quoteItem->getTotalQty() - $qty;
 
         if ($newQty == 0) {
             $quote->deleteItem($quoteItem)->save();
         } else {
             $quoteItem->setQty($newQty)->save();
-            $quote->save();
         }
+        $quote->save();
 
         // Make sure totals are recalculated!
         $quote->setTotalsCollectedFlag(false)->collectTotals();
-
-        // Set success message to let the customer know we have undone the action...
-        $message = Mage::helper('checkout')->__('Action un-done!');
-        Mage::getSingleton('checkout/session')->addSuccess($message);
-
     }
 
     protected function _undoRemoveFromCart() {
