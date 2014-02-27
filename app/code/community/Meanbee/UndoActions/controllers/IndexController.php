@@ -41,7 +41,7 @@ class Meanbee_UndoActions_IndexController extends Mage_Core_Controller_Front_Act
         $newQty = $quoteItem->getTotalQty() - $qty;
 
         if ($newQty == 0) {
-            $quote->deleteItem($quoteItem)->save();
+            $quote->removeItem($quoteItem->getId())->save();
         } else {
             $quoteItem->setQty($newQty)->save();
         }
