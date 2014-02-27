@@ -27,6 +27,8 @@ class Meanbee_UndoActions_IndexController extends Mage_Core_Controller_Front_Act
         /** @var Mage_Sales_Model_Quote_Item $quoteItem */
         $quoteItem = $quote->getItemByProduct($product);
 
+
+        // If $quoteItem is false, then we need to find it another way.
         if(!$quoteItem) {
             foreach($quote->getAllVisibleItems() as $item) {
                 if($item->getProductId() == $productId) {

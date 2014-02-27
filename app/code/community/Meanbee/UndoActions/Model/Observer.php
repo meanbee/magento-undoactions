@@ -36,15 +36,14 @@ class Meanbee_UndoActions_Model_Observer {
 
         $checkoutSession = Mage::getSingleton('checkout/session');
 
-        // Params we pass to update the item, we only need the quote item id, and quantity to remove.
+        // Params we pass to update the item, we only need the product id and qty
         $urlParams = array(
             'action' => 'undocartadd',
-            'quote_item' => $data['quote_item_id'],
             'qty' => Mage::app()->getRequest()->getPost('qty'),
             'product_id' => $data['product_id']
         );
         $message = Mage::helper('checkout')->__(
-            '%s was added to your shopping cart. <a class="undo-action" href="%s">undo</a>',
+            '%s was added to your shopping cart. <a class="undo-action" href="%s">Undo</a>',
             Mage::helper('core')->escapeHtml($productName),
             $this->_undoUrl($urlParams)
         );
@@ -74,12 +73,10 @@ class Meanbee_UndoActions_Model_Observer {
             )
         );
 
-        // Params we pass to update the item, we only need the quote item id, and quantity to remove.
-        $urlParams = array('action' => 'undocartremove');
         $message = Mage::helper('checkout')->__(
-            '%s was removed from your shopping cart. <a class="undo-action" href="%s">undo</a>',
+            '%s was removed from your shopping cart. <a class="undo-action" href="%s">Undo</a>',
             Mage::helper('core')->escapeHtml($observer->getQuoteItem()->getProduct()->getName()),
-            $this->_undoUrl($urlParams)
+            $this->_undoUrl(array('action' => 'undocartremove'))
         );
         $this->_updateMessages($checkoutSession, $message);
     }
