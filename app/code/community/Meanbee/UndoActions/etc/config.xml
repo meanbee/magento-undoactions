@@ -54,4 +54,13 @@
             <!-- END Remove from cart actions-->
         </events>
     </global>
+
+    <!-- PHP Unit Tests -->
+    <phpunit>
+        <suite>
+            <modules>
+                <Meanbee_UndoActions />
+            </modules>
+        </suite>
+    </phpunit>
 </config>
